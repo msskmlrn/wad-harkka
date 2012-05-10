@@ -1,0 +1,55 @@
+Alkuperäinen suunnitelma
+
+Musiikkikirjasto
+
+Etusivulla on lista albumeista, jotka on lisätty järjestelmään, ja niiden saamien arvosanojen keskiarvo (vielä määrittelemättömällä asteikoilla, luultavasti joko -1 - 1 tai 0 - 5).
+- Toteutettu, asteikoksi määräytyi 1 - 5.
+
+Kirjautunut käyttäjä voi valita etusivulla olevista albumeista omistamansa albumit omaan kirjastoonsa. Hän voi myös antaa arvosanan kirjastossaan olevalle albumille. Sellaiset käyttäjän kirjastossa olevat albumit, joita käyttäjä ei ole vielä arvostellut, näkyvät omassa listassaan. 
+- Toteutettu, käyttäjän omaan kirjastoonsa lisäämät albumit näkyvät omassa listassaan, jonne on pääsy käyttäjän profiilisivulta.
+
+Kirjautunut käyttäjä voi myös lisätä palveluun uusia albumeja lomakkeen avulla.
+- Toteutettu
+
+Kirjautumaton käyttäjä voi tarkastella etusivua ja käyttäjien profiileja.
+- Etusivun tarkasteleminen onnistuu, profiilien tarkasteleminen vaatii kirjautumisen
+
+Sovelluksen käyttöliittymä toteutetaan käyttäen Twitter Bootstrap-kirjastoa.
+- Toteutettu
+
+Kirjautumiseen käytettään joko OAuth- tai OpenID-palvelua (luultavasti OpenID:tä).
+- Toteutettu, OpenID toimii kirjautumismekanismina
+
+Sovellus toteutetaan Springillä.
+
+Lisäksi toteutettiin muutama muu ominaisuus.
+
+Kun uutta albumia lisätään järjestelmään, lisääjä voi antaa albumille kuvauksen.
+Käyttäjä voi tarkastella albumin tietoja omalla sivullaan, jossa näkyy muun muassa kaikkien albumin omistajien nimet.
+Käyttäjä voi tarkastella artistin sivua, jonne on listattu kaikki kyseisen artistin järjestelmään lisätyt albumit.
+Taulukkojen, kuten etusivun listauksen, listausjärjestystä voi muuttaa klikkaamalla sarakkeen otsikkoa.
+
+
+Aikataulusuunnitelma:
+
+          - 18.3.2012 Sovelluksen rakenteen hahmottelua
+19.3.2012 - 1.4.2012 Sovelluksen toiminnalisuudet OpenID/OAuth-palvelua ja käyttöliittymää lukuunottamatta toiminnassa + testejä
+2.4.2012 - 15.4.2012 OpenID/OAuth-kirjautumismekanismi toiminnassa.
+16.4.2012 - 29.4.2012 Twitter Bootstrapin opiskelu ja käyttöliittymän toteutus.
+Loppuaika käytetään koodin siistimiseen ja lisätestien kirjoittamiseen.
+
+
+Käyttöohje
+
+Kun järjestelmä avataan ensimmäistä kertaa eteen tulee etusivu, jonne on listattu taulukkoon valmiiksi muutamia albumeja, joista kerrotaan esittäjä, albumin nimi, arvostelujen keskiarvo. Artistin nimeä klikkaamalla pääsee sivulle, jonne on listattu kaikki artistin järjestelmään lisätyt albumit ja tietoa albumeista. Kun etusivulla klikkaa albumin nimeä, eteen tulee sivu, jonne on listattu albumin tiedot. Tältä sivulta löytyy myös tieto kaikista käyttäjistä, jotka ovat lisänneet albumin kirjastoonsa. Etusivun taulukon, kuten muidenkin sivujen taulukoiden, järjestystä voi muuttaa klikkaamaalla sarakkeiden otsikoita.
+
+Järjestelmään kirjaudutaan sisään klikkaamalla yläreunan navigointiosion login-linkkiä. Tämän jälkeen kirjautuminen tapahtuu Googlen OpenID-toteutuksen avulla. Kun järjestelmään on kirjauduttu, etusivulla näkyy uutena tietona mahdollisuus lisätä uusi albumi järjestelmään ja mahdollisuus lisätä albumi omaan musiikkikirjastoon. Uuden albumin lisääminen tapahtuu klikkaamalla create new album-linkkiä, jolloin eteen aukee sivu, jonne pitää syöttää albumin tiedot. Kaikkien kenttien täyttäminen on pakollista ja kentät hyväksyvät vain suomenkielen aakkosista löytyviä kirjaimia, paitsi vuosiluku, jonka tulee koostua neljästä numerosta. Uuden albumin lisäämisen jälkeen albumi ilmestyy etusivun listaukseen. Oletuksena arvostelemattoman albumin arvosanojen keskiarvo on 0.
+
+Kirjautunut käyttäjä voi lisätä albumin omaan kokoelmaansa klikkaamalla etusivun listauksen add to collection-nappulaa. Nyt käyttäjä voi navigoida omalle profiilisivulleen klikkaamalla etusivulta omaa nimeään ja avautuvalta sivulta löytyvää rate albums-linkkiä. Tällä sivulla käyttäjä voi klikata haluamaansa arvosanaa välillä 1 - 5 albumille. Kun arvosana on annettu, käyttäjä palautuu omalle profiilisivulleen, jonne on nyt listattuna arvosteltu albumi ja käyttäjän antama arvosana. Kun albumi arvostellaan, käyttäjä näkee etusivulla albumille annettujen arvosanojen päivitetyn keskiarvon.
+
+Järjestelmästä voi kirjautua ulos klikkaamalla oikeasta yläreunasta löytyvää painiketta, joka aukaisee pudotusvalikon, josta voi valita log out-toiminnon.
+
+
+
+
+
