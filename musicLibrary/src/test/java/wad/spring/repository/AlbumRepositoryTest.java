@@ -2,6 +2,7 @@ package wad.spring.repository;
 
 import java.util.List;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +18,18 @@ public class AlbumRepositoryTest {
 
     @Autowired
     AlbumRepository albumRepository;
-
+    
+    @Before
+    public void setUp() {
+        Album album = new Album();
+        album.setAlbumName("The Resistance");
+        album.setAlbumArtist("Muse");
+        album.setGenre("Rock");
+        album.setDescription("Jahuu");
+        album.setReleaseYear("2009");
+        album = albumRepository.save(album);
+    }
+    
     @Test
     @Transactional
     public void saveAlbumToDatabase() {
@@ -39,14 +51,6 @@ public class AlbumRepositoryTest {
     @Test
     @Transactional
     public void findAlbumByName() {
-        Album album = new Album();
-        album.setAlbumName("The Resistance");
-        album.setAlbumArtist("Muse");
-        album.setGenre("Rock");
-        album.setDescription("Jahuu");
-        album.setReleaseYear("2009");
-        album = albumRepository.save(album);
-
         Album a = albumRepository.findByAlbumName("The Resistance");
         String name = a.getAlbumName();
 
@@ -55,18 +59,26 @@ public class AlbumRepositoryTest {
     
     @Test
     @Transactional
-    public void findByAlbumArtist() {
-        Album album = new Album();
-        album.setAlbumName("The Resistance");
-        album.setAlbumArtist("Muse");
-        album.setGenre("Rock");
-        album.setDescription("Jahuu");
-        album.setReleaseYear("2009");
-        album = albumRepository.save(album);
+    public void findAlbumByNameDoesNotReturnMissingAlbum() {
+        Album a = albumRepository.findByAlbumName("The The");
 
+        Assert.assertTrue(a == null);
+    }
+    
+    @Test
+    @Transactional
+    public void findByAlbumArtist() {
         List<Album> albums = albumRepository.findByAlbumArtist("Muse");
         String name = albums.get(0).getAlbumArtist();
 
         Assert.assertTrue(name.compareTo("Muse") == 0);
+    }
+    
+    @Test
+    @Transactional
+    public void findByAlbumArtistDoesNotReturnMissingArtists() {
+        List<Album> albums = albumRepository.findByAlbumArtist("The");
+
+        Assert.assertTrue(albums.isEmpty());
     }
 }

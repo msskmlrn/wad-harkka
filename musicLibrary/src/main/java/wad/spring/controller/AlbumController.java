@@ -24,7 +24,6 @@ public class AlbumController {
 
     @RequestMapping(value = "/app/album", method = RequestMethod.GET)
     public String showFrontPage(Model model) {
-        secureService.executeFreely();
         model.addAttribute("albums", albumService.getAlbums());
         model.addAttribute("users", userService.getUsers());
         return "/index";
@@ -38,8 +37,14 @@ public class AlbumController {
 
     @RequestMapping(value = "/app/album/{albumId}", method = RequestMethod.GET)
     public String showAlbumPage(Model model, @PathVariable Long albumId) {
-        model.addAttribute("album", albumService.getAlbum(albumId));
-        model.addAttribute("owners", albumService.getAlbum(albumId).getOwners());
+        Album album = albumService.getAlbum(albumId);
+        
+        if (album == null) {
+            return "redirect:/app/album";
+        }
+        
+        model.addAttribute("album", album);
+        model.addAttribute("owners", album.getOwners());
 
         return "/album/albumpage";
     }

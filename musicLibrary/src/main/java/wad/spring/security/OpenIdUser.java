@@ -4,6 +4,9 @@ import java.util.Collection;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 
+/*
+ * @author Luke Taylor (https://fisheye.springsource.org/browse/spring-security/samples/openid/src/main/java/org/springframework/security/samples/openid/CustomUserDetails.java?hb=true)
+ */ 
 public class OpenIdUser extends User {
    private String name;
    private boolean newUser;

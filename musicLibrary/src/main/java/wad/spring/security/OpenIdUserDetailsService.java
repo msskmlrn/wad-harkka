@@ -13,6 +13,12 @@ import org.springframework.security.openid.OpenIDAuthenticationToken;
 import wad.spring.domain.User;
 import wad.spring.repository.UserRepository;
 
+/* 
+ * Mukailtu lähteestä
+ * @author Luke Taylor
+ * https://fisheye.springsource.org/browse/spring-security/samples/openid/src/main/java/org/springframework/security/samples/openid/CustomUserDetailsService.java?hb=true
+ */
+
 public class OpenIdUserDetailsService implements UserDetailsService, AuthenticationUserDetailsService<OpenIDAuthenticationToken> {
 
     @Autowired

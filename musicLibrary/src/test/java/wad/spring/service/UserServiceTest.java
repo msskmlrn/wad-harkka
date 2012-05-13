@@ -2,6 +2,7 @@ package wad.spring.service;
 
 import java.util.List;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,9 +30,8 @@ public class UserServiceTest {
     @Autowired
     RatingRepository ratingRepository;
     
-    @Test
-    @Transactional
-    public void getUsers() {
+    @Before
+    public void setUp() {
         User user = new User();
         user.setName("Matti Mattila");
         user.setOpenIdIdentifier("https://www.google.com/accounts/o8/id?id=AItxxioJSDLFJLjxcksdfjOpAASDFosSSoJ0E");
@@ -41,7 +41,18 @@ public class UserServiceTest {
         user.setName("Matti Matti");
         user.setOpenIdIdentifier("https://www.google.com/accounts/o8/id?id=AItxxioJSDLFJLasfafasfasf");
         user = userRepository.save(user);
-
+        
+        long i = 10;
+        user = new User();
+        user.setName("Pekka Mattila");
+        user.setId(i);
+        user.setOpenIdIdentifier("https://www.google.com/accounts/o8/id?id=asasf");
+        user = userRepository.save(user);
+    }
+    
+    @Test
+    @Transactional
+    public void getUsers() {
         long userRepositoryCount = userRepository.count();
 
         List<User> users = userService.getUsers();
@@ -53,15 +64,20 @@ public class UserServiceTest {
     @Transactional
     public void getUserById() {
         long i = 10;
-        User user = new User();
-        user.setName("Pekka Mattila");
-        user.setId(i);
-        user.setOpenIdIdentifier("https://www.google.com/accounts/o8/id?id=AItxxioJSDLFJLjxcksdfjOpAASDFosSSoJ0E");
-        user = userRepository.save(user);
 
         User u = userService.getUser(i);
 
         Assert.assertTrue(u.getName().compareTo("Pekka Mattila") == 0);
+    }
+    
+    @Test
+    @Transactional
+    public void getUserByIdDoesNotReturnMissingUser() {
+        long i = 100;
+
+        User u = userService.getUser(i);
+
+        Assert.assertTrue(u == null);
     }
 
     @Test
@@ -117,5 +133,15 @@ public class UserServiceTest {
         List<Album> albums = userService.getAlbumsToBeRatedForUser(i);
         
         Assert.assertTrue(albums.size() == 2);
+    }
+    
+    @Test
+    @Transactional
+    public void getAlbumsToBeRatedForUserDoesNotReturnMissingAlbums() {
+        long i = 10;
+        
+        List<Album> albums = userService.getAlbumsToBeRatedForUser(i);
+        
+        Assert.assertTrue(albums.isEmpty());
     }
 }

@@ -15,6 +15,9 @@ public interface AlbumService {
     public List<Rating> getRatingsForAlbum(String albumName);
     
     @PreAuthorize("isAuthenticated()")
+    public boolean albumRatedAlreadyByUser(Long userId, long albumId);
+    
+    @PreAuthorize("isAuthenticated()")
     public void updateAverageRating(String albumName);
     
     @PreAuthorize("isAuthenticated()")

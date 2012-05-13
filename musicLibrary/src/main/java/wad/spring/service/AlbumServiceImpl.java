@@ -45,6 +45,19 @@ public class AlbumServiceImpl implements AlbumService {
     public void addRating(long albumId, int rating, String openid) {
         User user = userRepository.findByOpenIdIdentifier(openid);
         Album album = albumRepository.findOne(albumId);
+        
+        if (user == null || album == null) {
+            return;
+        }
+        
+        if (rating != 1 && rating != 2 && rating != 3 && rating != 4 && rating != 5) {
+            return;
+        }
+        
+        if (albumRatedAlreadyByUser(user.getId(), albumId)) {
+            return;
+        }
+        
         Rating r = user.addRating(album, rating);
         album.addAlbumRating(r);
         
@@ -85,6 +98,11 @@ public class AlbumServiceImpl implements AlbumService {
     public void updateAverageRating(String albumName) {
         double stars = 0;
         Album album = albumRepository.findByAlbumName(albumName);
+        
+        if (album == null) {
+            return;
+        }
+        
         List <Rating> ratings = album.getAlbumRatings();
         
         for (Rating r : ratings) {
@@ -95,5 +113,19 @@ public class AlbumServiceImpl implements AlbumService {
         
         album.setAverageRating(stars/ratings.size());
         albumRepository.save(album);
+    }
+    
+    @Override
+    @Transactional
+    public boolean albumRatedAlreadyByUser(Long userId, long albumId) {
+        Album album = albumRepository.findOne(albumId);
+        List<Rating> ratings = ratingRepository.findByAlbum(album);
+        
+        for (Rating r : ratings) {
+            if (r.getRater().getId().equals(userId)) {
+                return true;
+            }    
+        }
+        return false;
     }
 }

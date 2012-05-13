@@ -8,7 +8,6 @@ import org.springframework.transaction.annotation.Transactional;
 import wad.spring.domain.Album;
 import wad.spring.domain.Rating;
 import wad.spring.domain.User;
-import wad.spring.repository.AlbumRepository;
 import wad.spring.repository.UserRepository;
 
 @Service
@@ -16,8 +15,6 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserRepository userRepository;
-    @Autowired
-    private AlbumRepository albumRepository;
 
     @Override
     @Transactional

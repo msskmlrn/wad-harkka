@@ -1,6 +1,8 @@
 package wad.spring.repository;
 
+import java.util.List;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,11 +25,8 @@ public class RatingRepositoryTest {
     @Autowired
     UserRepository userRepository;
     
-    @Test
-    @Transactional
-    public void saveRatingToDatabase() {
-        long countAtStart = ratingRepository.count();
-        
+    @Before
+    public void setUp() {
         Album album = new Album();
         album.setAlbumName("And the Glass Handed Kites");
         album.setAlbumArtist("Mew");
@@ -35,6 +34,19 @@ public class RatingRepositoryTest {
         album.setDescription("Jee");
         album.setReleaseYear("2005");
         album = albumRepository.save(album);
+        
+        User user = new User();
+        user.setName("Matti Mattila");
+        user.setOpenIdIdentifier("https://www.google.com/accounts/o8/id?id=AItxxioJSDLFJLjxcksdfjOpAASDFosSSoJ0E");
+        user = userRepository.save(user);
+    }
+    
+    @Test
+    @Transactional
+    public void saveRatingToDatabase() {
+        long countAtStart = ratingRepository.count();
+        
+        Album album = albumRepository.findByAlbumName("And the Glass Handed Kites");
         
         Rating r = new Rating();
         r.setAlbum(album);
@@ -51,18 +63,8 @@ public class RatingRepositoryTest {
     @Test
     @Transactional
     public void findByAlbum() {
-        Album album = new Album();
-        album.setAlbumName("The Resistance");
-        album.setAlbumArtist("Muse");
-        album.setGenre("Rock");
-        album.setDescription("Jahuu");
-        album.setReleaseYear("2009");
-        album = albumRepository.save(album);
-        
-        User user = new User();
-        user.setName("Matti Mattila");
-        user.setOpenIdIdentifier("https://www.google.com/accounts/o8/id?id=AItxxioJSDLFJLjxcksdfjOpAASDFosSSoJ0E");
-        user = userRepository.save(user);
+        Album album = albumRepository.findByAlbumName("And the Glass Handed Kites");
+        User user = userRepository.findByOpenIdIdentifier("https://www.google.com/accounts/o8/id?id=AItxxioJSDLFJLjxcksdfjOpAASDFosSSoJ0E");
         
         Rating rating = user.addRating(album, 3);
         album.addAlbumRating(rating);
@@ -70,9 +72,18 @@ public class RatingRepositoryTest {
         ratingRepository.save(rating);
         album = albumRepository.save(album);
         
-        
         ratingRepository.findByAlbum(album);
         
-        Assert.assertTrue(album.getAlbumName().compareTo("The Resistance")==0);
+        Assert.assertTrue(album.getAlbumName().compareTo("And the Glass Handed Kites")==0);
+    }
+    
+    @Test
+    @Transactional
+    public void findByAlbumDoesNotReturnMissingAlbum() {
+        Album album = new Album();
+        
+        List<Rating> ratings = ratingRepository.findByAlbum(album);
+                
+        Assert.assertTrue(ratings.isEmpty());
     }
 }

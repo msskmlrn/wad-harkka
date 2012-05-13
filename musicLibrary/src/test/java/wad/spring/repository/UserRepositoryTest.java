@@ -1,12 +1,14 @@
 package wad.spring.repository;
 
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
+import wad.spring.domain.Album;
 import wad.spring.domain.User;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -18,6 +20,14 @@ public class UserRepositoryTest {
     AlbumRepository albumRepository;
     @Autowired
     UserRepository userRepository;
+    
+    @Before
+    public void setUp() {
+        User user = new User();
+        user.setName("Matti Matti");
+        user.setOpenIdIdentifier("https://www.google.com/accounts/o8/id?id=AItxxioJSDLFJLasfafasfasf");
+        user = userRepository.save(user);
+    }
     
     @Test
     @Transactional
@@ -37,13 +47,16 @@ public class UserRepositoryTest {
     @Test
     @Transactional
     public void findUserByOpenIdIdentifier() {
-        User user = new User();
-        user.setName("Matti Matti");
-        user.setOpenIdIdentifier("https://www.google.com/accounts/o8/id?id=AItxxioJSDLFJLasfafasfasf");
-        user = userRepository.save(user);
+        User user = userRepository.findByOpenIdIdentifier("https://www.google.com/accounts/o8/id?id=AItxxioJSDLFJLasfafasfasf");        
         
-        User u = userRepository.findByOpenIdIdentifier("https://www.google.com/accounts/o8/id?id=AItxxioJSDLFJLasfafasfasf");
+        Assert.assertTrue(user.getName().equals("Matti Matti")); 
+    }
+    
+    @Test
+    @Transactional
+    public void findUserByOpenIdIdentifierDoesNotReturnMissingUser() {
+        User user = userRepository.findByOpenIdIdentifier("https://www.google.com/accounts/aaa");        
         
-        Assert.assertTrue(u.getName().equals("Matti Matti")); 
+        Assert.assertTrue(user == null); 
     }
 }

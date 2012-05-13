@@ -18,7 +18,7 @@ Sovelluksen käyttöliittymä toteutetaan käyttäen Twitter Bootstrap-kirjastoa
 - Toteutettu
 
 Kirjautumiseen käytettään joko OAuth- tai OpenID-palvelua (luultavasti OpenID:tä).
-- Toteutettu, OpenID toimii kirjautumismekanismina.
+- Toteutettu, OpenID toimii kirjautumismekanismina
 
 Sovellus toteutetaan Springillä.
 

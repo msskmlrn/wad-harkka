@@ -17,7 +17,12 @@
             <!-- Main hero unit for a primary marketing message or call to action -->
             <div class="hero-unit">
                 <h1>Music Library</h1>
-                <p>See how different albums rank among out users. Add your albums to the database and rate them when hear them. Log in to start rating.</p>
+                <sec:authorize access="isAuthenticated()">
+                    <p>Have fun with rating.</p>
+                </sec:authorize>
+                <sec:authorize access="isAnonymous()">
+                    <p>See how different albums rank among out users. Add your albums to the database and rate them when hear them. Log in to start rating.</p>    
+                </sec:authorize>
             </div>
 
             <div class="row">

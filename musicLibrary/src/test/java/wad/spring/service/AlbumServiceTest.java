@@ -96,21 +96,37 @@ public class AlbumServiceTest {
 
         Assert.assertTrue(a.getAlbumName().compareTo("And the Glass Handed Kites") == 0);
     }
+    
+    @Test
+    @Transactional
+    public void getAlbumDoesNotReturnMissingAlbum() {
+        long j = 100;
+        Album a = albumService.getAlbum(j);
+
+        Assert.assertTrue(a == null);
+    }
 
     @Test
     @Transactional
     public void getAlbums() {
         List<Album> albums = albumService.getAlbums();
-        System.out.println("AAAAAAAAAAAAAAAAAAAAAAAA "+albums.size());
         Assert.assertTrue(albums.size() == 3);
     }
-
+    
     @Test
     @Transactional
     public void getAlbumsForArtist() {
         List<Album> albums = albumService.getAlbumsFromArtist("Mew");
 
         Assert.assertTrue(albums.size() == 2);
+    }
+    
+    @Test
+    @Transactional
+    public void getAlbumsForArtistDoesNotReturnMissingAlbums() {
+        List<Album> albums = albumService.getAlbumsFromArtist("The");
+
+        Assert.assertTrue(albums.isEmpty());
     }
 
     @Test
@@ -119,6 +135,14 @@ public class AlbumServiceTest {
         List<Rating> ratings = albumService.getRatingsForAlbum("And the Glass Handed Kites");
 
         Assert.assertTrue(ratings.size() == 2);
+    }
+    
+    @Test
+    @Transactional
+    public void getRatingsForAlbumDoesNotReturnRatingsForMissingAlbum() {
+        List<Rating> ratings = albumService.getRatingsForAlbum("The");
+
+        Assert.assertTrue(ratings.isEmpty());
     }
     
     @Test
@@ -133,18 +157,42 @@ public class AlbumServiceTest {
     @Test
     @Transactional
     public void addRating() {
-        long i = 10;
         long j = 5;
-        
         User user = new User();
         user.setName("Sami Sami");
-        user.setOpenIdIdentifier("https://www.google.com/accounts/o8/id?id=AIdasfasfasfSoJ0E");
+        user.setOpenIdIdentifier("https://www.google.com/accounts/o8/id?id=AIdassffsdefasfasfSoJ0E");
         user = userRepository.save(user);
         
         albumService.addRating(j, 5, user.getOpenIdIdentifier());
+        
         Album album = albumService.getAlbum(j);
         
         Assert.assertTrue(album.getAlbumRatings().size() == 1);
+    }
+    
+    @Test
+    @Transactional
+    public void doNotAddRatingSeveralRatingsForOneUser() {
+        long j = 5;
+        User user = new User();
+        user.setName("Sami Sami");
+        user.setOpenIdIdentifier("https://www.google.com/accounts/o8/id?id=AIdassffsdefasfasfSoJ0E");
+        user = userRepository.save(user);
+        
+        albumService.addRating(j, 5, user.getOpenIdIdentifier());
+               
+        albumService.addRating(j, 1, user.getOpenIdIdentifier());
+        
+        Album album = albumService.getAlbum(j);
+        
+        Assert.assertTrue(album.getAlbumRatings().size() == 1);
+        
+        user = userRepository.findOne(j);
+        Assert.assertTrue(user.getRatings().size() == 1);
+        
+        List<Rating> ratings = user.getRatings();
+        
+        Assert.assertTrue(ratings.get(0).getStars() == 5);
     }
     
     @Test

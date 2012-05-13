@@ -12,7 +12,6 @@
     <http use-expressions="true">
         <intercept-url pattern="/app/album/new" access="isAuthenticated()" />
         <intercept-url pattern="/app/user/**/rate" access="isAuthenticated()" />
-        <intercept-url pattern="/app/user/**/" access="permitAll" />
         <intercept-url pattern="/**" access="permitAll" />
         
         <!-- huom! kun teet sovellusta tuotantokäyttöä varten, permitAll-oletus ei ole hyvä idea! /** -->
